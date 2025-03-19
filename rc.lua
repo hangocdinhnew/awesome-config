@@ -461,7 +461,7 @@ awful.rules.rules = {
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen,
 		     maximized_vertical = false,
 		     maximized_horizontal = false,
-		     floating = true,
+		     floating = false,
 		     maximized = false
      }
     },
