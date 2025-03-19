@@ -175,12 +175,13 @@ awful.screen.connect_for_each_screen(function(s)
     s.mypromptbox = awful.widget.prompt()
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
-    s.mylayoutbox = awful.widget.layoutbox(s)
-    s.mylayoutbox:buttons(gears.table.join(
-                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
-                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
-                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    -- s.mylayoutbox = awful.widget.layoutbox(s)
+    -- s.mylayoutbox:buttons(gears.table.join(
+    --                        awful.button({ }, 1, function () awful.layout.inc( 1) end),
+    --                        awful.button({ }, 3, function () awful.layout.inc(-1) end),
+    --                        awful.button({ }, 4, function () awful.layout.inc( 1) end),
+    --                        awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist {
         screen  = s,
@@ -294,14 +295,18 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Prompt
-    awful.key({ modkey },            "space",     function() awful.spawn("rofi -show drun -theme ~/.config/rofi/theme.rasi") end,
+    awful.key({ modkey },            "space",     function() awful.spawn("rofi -show drun -theme ~/.config/rofi/theme.rasi --fonts 'noto emoji fonts 15'") end,
               {description = "desktop run prompt", group = "launcher"}),
-    awful.key({ modkey, "Shift" },            "space",     function() awful.spawn("rofi -show run -theme ~/.config/rofi/theme.rasi") end,
+    awful.key({ modkey, "Shift" },            "space",     function() awful.spawn("rofi -show run -theme ~/.config/rofi/theme.rasi --fonts 'noto emoji fonts 15'") end,
               {description = "run prompt", group = "launcher"}),
-    awful.key({ modkey, "Control" },            "space",     function() awful.spawn("rofi -show window -theme ~/.config/rofi/theme.rasi") end,
+    awful.key({ modkey, "Control" },            "space",     function() awful.spawn("rofi -show window -theme ~/.config/rofi/theme.rasi --fonts 'noto emoji fonts 15'") end,
               {description = "window switcher", group = "launcher"}),
-    awful.key({ modkey, "Mod1" },            "space",     function() awful.spawn("rofi -show ssh -theme ~/.config/rofi/theme.rasi") end,
-              {description = "ssh", group = "launcher"}),
+    awful.key({ modkey, "Mod1" },            "space",     function() awful.spawn("rofi -modi emoji -show emoji -theme ~/.config/rofi/theme.rasi --fonts 'noto emoji fonts 15'") end,
+              {description = "emoji picker", group = "launcher"}),
+
+    -- Thunar
+    awful.key({ modkey }, "e", function() awful.spawn("thunar") end,
+    	      {description = "run thunar", group = "launcher"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -551,3 +556,4 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 awful.spawn.single_instance("picom", awful.rules.rules)
+awful.spawn.single_instance("copyq", awful.rules.rules)
