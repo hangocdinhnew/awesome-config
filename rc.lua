@@ -14,6 +14,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+local ip_widget = require("widgets.awesome-ip-widget.ip")
+
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
@@ -90,10 +92,12 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+mymainmenu = awful.menu({ items = 
+{ 
+    { "awesome", myawesomemenu, beautiful.awesome_icon },
+    { "open terminal", terminal }
+}
+})
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -108,6 +112,18 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+
+local volume_icon = wibox.widget {
+  image = "/usr/share/icons/Papirus-Dark/24x24/panel/audio-volume-high.svg",
+  resize = true,
+  widget = wibox.widget.imagebox
+}
+
+volume_icon:buttons(gears.table.join(
+  awful.button({}, 1, function()
+	  awful.spawn("pavucontrol")
+  end)
+))
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -212,9 +228,10 @@ awful.screen.connect_for_each_screen(function(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
+	    volume_icon,
             wibox.widget.systray(),
+	    ip_widget,
             mytextclock,
-            s.mylayoutbox,
         },
     }
 end)
@@ -444,7 +461,7 @@ awful.rules.rules = {
                      placement = awful.placement.no_overlap+awful.placement.no_offscreen,
 		     maximized_vertical = false,
 		     maximized_horizontal = false,
-		     floating = false,
+		     floating = true,
 		     maximized = false
      }
     },
@@ -455,6 +472,7 @@ awful.rules.rules = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
           "pinentry",
+	  "pavucontrol"
         },
         class = {
           "Arandr",
